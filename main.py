@@ -84,7 +84,7 @@ def register():
         return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
 
-@app.route("/find_email")
+@app.route("/find_email", methods=['POST'])
 def find_email():
     form = EmailForm()
     if form.validate_on_submit():
