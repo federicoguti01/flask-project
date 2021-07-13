@@ -1,6 +1,7 @@
 import time, random, threading
 from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
+from SQLAlchemy import select
 from flask_bcrypt import Bcrypt
 from turbo_flask import Turbo
 from forms import RegistrationForm, EmailForm
@@ -93,8 +94,10 @@ def find_email():
         for user_obj in result.scalars():
             if(bcrypt.check_password_hash(user_obj.password, form.password.data)):
                 flash(f'The email associated with this account is {user_obj.email}', 'success')
+                return redirect(url_for('home'))
             else:
                 flash('Incorrect password', 'error')
+                return redirect(url_for('home'))
     return render_template('find_email.html', title='Find Email', form=form)
   
 if __name__ == '__main__':
