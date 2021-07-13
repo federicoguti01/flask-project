@@ -88,7 +88,7 @@ def register():
 def find_email():
     form = EmailForm()
     if form.validate_on_submit():
-        my_user = db.query().filter(User.username == form.username.data).first()
+        my_user = session.query(db).filter_by(username=form.username.data).first()
         if(bcrypt.check_password_hash(my_user.password, form.password.data)):
             flash(f'The email associated with this account is {my_user.email}', 'success')
             return redirect(url_for('home'))
