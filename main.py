@@ -89,11 +89,15 @@ def find_email():
     form = EmailForm()
     if form.validate_on_submit():
         my_user = db.session.query(User).filter_by(username=form.username.data).first()
-        if(bcrypt.check_password_hash(my_user.password, form.password.data)):
-            flash(f'The email associated with this account is {my_user.email}', 'success')
-            return redirect(url_for('home'))
+        if my_user:
+            if bcrypt.check_password_hash(my_user.password, form.password.data):
+                flash(f'The email associated with this account is {my_user.email}', 'success')
+                return redirect(url_for('home'))
+            else:
+                flash('Incorrect password', 'error')
+                return redirect(url_for('home'))
         else:
-            flash('Incorrect password', 'error')
+            flash('User does not exist', 'error')
             return redirect(url_for('home'))
     return render_template('find_email.html', title='Find Email', form=form)
   
