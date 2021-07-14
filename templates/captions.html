@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+    {{ turbo() }} 
 <h2>{{ songName }}</h2>
     <audio src="{{url_for('static', filename=file) }}" type="audio/x-wav" controls autoplay="autoplay">
     <p>Your browser does not support the audio element </p>
