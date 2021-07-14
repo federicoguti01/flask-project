@@ -1,6 +1,7 @@
 import time, random, threading
 from flask import Flask, render_template, url_for, flash, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 from flask_bcrypt import Bcrypt
 from turbo_flask import Turbo
 from forms import RegistrationForm, EmailForm
@@ -78,10 +79,15 @@ def register():
     if form.validate_on_submit(): # checks if entries are valid
         user = User(username=form.username.data, email=form.email.data, 
                     password=bcrypt.generate_password_hash(form.password.data).decode('utf-8'))
-        db.session.add(user)
-        db.session.commit()
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('home')) # if so - send to home page
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except exc.IntegrityError:
+            flash('User not created: Username or email associated with existing account', 'error')
+        else:
+            flash(f'Account created for {form.username.data}!', 'success')
+        finally:
+            return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form)
 
 @app.route("/find_email", methods=['GET', 'POST'])
