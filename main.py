@@ -5,7 +5,7 @@ from sqlalchemy import exc
 from flask_bcrypt import Bcrypt
 from turbo_flask import Turbo
 from forms import RegistrationForm, EmailForm
-from audio import printWAV
+# from audio import printWAV
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '37be8d614b721cbab4a9c00ca3717ddf'
@@ -34,10 +34,10 @@ def home():
     return render_template('home.html', subtitle='Home Page', 
                            text='This is the home page')
 
-@app.route("/captions")
-def captions():
-    TITLE = "doug demuro mclaren"
-    return render_template('captions.html', songName=TITLE, file=FILE_NAME)
+# @app.route("/captions")
+# def captions():
+#     TITLE = "doug demuro mclaren"
+#     return render_template('captions.html', songName=TITLE, file=FILE_NAME)
   
 @app.before_first_request
 def before_first_request():
@@ -64,14 +64,14 @@ def inject_load():
     #returning captions
     return {'caption':printWAV(FILE_NAME, pos=pos, clip=interval)}
 
-def update_captions():
-    with app.app_context():
-        while True:
-            # timing thread waiting for the interval
-            time.sleep(interval)
+# def update_captions():
+#     with app.app_context():
+#         while True:
+#             # timing thread waiting for the interval
+#             time.sleep(interval)
 
-            # forcefully updating captionsPane with caption
-            turbo.push(turbo.replace(render_template('captionsPane.html'), 'load'))
+#             # forcefully updating captionsPane with caption
+#             turbo.push(turbo.replace(render_template('captionsPane.html'), 'load'))
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
