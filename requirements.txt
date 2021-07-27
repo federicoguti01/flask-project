@@ -13,3 +13,4 @@ pytest
 pycodestyle
 flask-bcrypt
 turbo-flask
+speech_recognition
